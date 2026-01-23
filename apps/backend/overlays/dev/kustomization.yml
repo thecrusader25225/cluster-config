@@ -1,0 +1,8 @@
+resources:
+  - ../../base
+images:
+  - name: shane25225/backend
+    newTag: "66cc77da636410c12df5a9e6eacb2eb5141747b3"
+replicas:
+  - name: backend
+    count: 1

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: dev
+data:
+  VITE_API_URL: "http://api.fullstack.192.168.93.131.sslip.io:32712"

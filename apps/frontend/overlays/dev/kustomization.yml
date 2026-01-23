@@ -1,0 +1,8 @@
+resources:
+  - ../../base
+images:
+  - name: shane25225/frontend
+    newTag: 9fae661d56990ab84b3c3211de61305b2fe92ed9
+replicas:
+  - name: frontend
+    count: 1

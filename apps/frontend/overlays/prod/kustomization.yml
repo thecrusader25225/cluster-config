@@ -1,0 +1,9 @@
+resources:
+  - ../../base
+
+images:
+  - name: shane25225/frontend
+    newTag: prod 
+replicas:
+  - name: frontend
+    count: 3

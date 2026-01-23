@@ -1,0 +1,9 @@
+resources:
+  - ../../base
+
+images:
+  - name: shane25225/backend
+    newTag: prod 
+replicas:
+  - name: backend
+    count: 3
