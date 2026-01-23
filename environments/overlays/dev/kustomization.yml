@@ -1,4 +1,14 @@
 resources:
   - ../../base
+
 namespace: dev
 nameSuffix: -dev
+
+patches:
+  - target:
+      kind: Ingress
+      name: frontend
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: fullstack.192.168.156.129.sslip.io
