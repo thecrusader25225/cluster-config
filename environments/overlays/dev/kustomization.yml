@@ -13,7 +13,7 @@ patches:
         value: dev.fullstack.192.168.156.129.sslip.io
       
       - op: replace
-        path: /spec/rules/0/http/paths/0/frontend/service/name
+        path: /spec/rules/0/http/paths/0/backend/service/name
         value: frontend-service-dev
       
       - op: replace
