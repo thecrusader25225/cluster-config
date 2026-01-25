@@ -6,3 +6,4 @@ images:
 replicas:
   - name: backend
     count: 1
+nameSuffix: -dev

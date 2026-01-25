@@ -6,3 +6,4 @@ images:
 replicas:
   - name: frontend
     count: 1
+nameSuffix: -dev

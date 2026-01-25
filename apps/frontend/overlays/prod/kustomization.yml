@@ -7,3 +7,4 @@ images:
 replicas:
   - name: frontend
     count: 3
+nameSuffix: -prod
