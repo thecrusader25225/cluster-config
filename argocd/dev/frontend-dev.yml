@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/thecrusader25225/application-services.git
     targetRevision: master
-    path: k8s/apps/frontend/overlays/dev
+    path: apps/frontend/overlays/dev
 
   destination:
     server: https://kubernetes.default.svc
