@@ -3,7 +3,7 @@ resources:
 
 images:
   - name: shane25225/frontend
-    newTag: prod 
+    newTag: v1.0.0
 replicas:
   - name: frontend
     count: 3
