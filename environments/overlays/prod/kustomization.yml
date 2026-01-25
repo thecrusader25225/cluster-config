@@ -2,3 +2,11 @@ resources:
   - ../../base
 namespace: prod
 nameSuffix: prod
+
+patches:
+  - target:
+      kind: Ingress
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: fullstack.192.168.156.129.sslip.io
