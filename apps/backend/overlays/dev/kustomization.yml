@@ -2,7 +2,7 @@ resources:
   - ../../base
 images:
   - name: shane25225/backend
-    newTag: "66cc77da636410c12df5a9e6eacb2eb5141747b3"
+    newTag: "afc95f5b1e7d08e46a5b65f84a14c9a0ebb9d4ee"
 replicas:
   - name: backend
     count: 1
