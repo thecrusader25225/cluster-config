@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: frontend-prod
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/thecrusader25225/cluster-config.git
+    targetRevision: main
+    path: apps/frontend/overlays/prod
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: prod
