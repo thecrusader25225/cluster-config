@@ -1,7 +1,7 @@
 resources:
   - ../../base
 namespace: prod
-nameSuffix: prod
+nameSuffix: -prod
 
 patches:
   - target:
@@ -10,3 +10,11 @@ patches:
       - op: replace
         path: /spec/rules/0/host
         value: fullstack.192.168.156.129.sslip.io
+      
+      - op: replace
+        path: /spec/rules/0/http/paths/0/frontend/service/name
+        value: frontend-service-prod
+      
+      - op: replace
+        path: /spec/rules/0/http/paths/0/backend/service/name
+        value: backend-service-prod
