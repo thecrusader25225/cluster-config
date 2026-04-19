@@ -116,7 +116,7 @@ This enforces fast iteration in dev and controlled releases in prod.
 This repository does **not build images**.
 
 Instead:
-- CI pipelines in the application repository build and publish images
+- CI pipelines in the <a href="https://github.com/thecrusader25225/webapp-services">application repository</a> build and publish images
 - Image tags are updated in **environment overlays** here
 - Argo CD reconciles the new desired state
 
