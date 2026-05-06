@@ -1,0 +1,23 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-model2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-model2
+  template:
+    metadata:
+      labels:
+        app: test-model2
+    spec:
+      containers:
+      - name: inference
+        image: shane25225/inference-server:latest
+        env:
+        - name: MODEL_URL
+          value: "https://storage.googleapis.com/models-bucket25225/models/best.onnx"
+        ports:
+        - containerPort: 8000
