@@ -1,0 +1,23 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-model
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-model
+  template:
+    metadata:
+      labels:
+        app: test-model
+    spec:
+      containers:
+      - name: inference
+        image: your-inference-image
+        env:
+        - name: MODEL_URL
+          value: "gs://bucket/model.onnx"
+        ports:
+        - containerPort: 8000
