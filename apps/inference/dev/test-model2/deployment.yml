@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: inference
-        image: shane25225/inference-server:latest
+        image: shane25225/inference-server:v2
         env:
         - name: MODEL_URL
           value: "https://storage.googleapis.com/models-bucket25225/models/best.onnx"
