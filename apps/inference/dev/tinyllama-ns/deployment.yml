@@ -4,7 +4,7 @@ kind: Deployment
 
 metadata:
   name: tinyllama-ns
-  namespace: inference
+  namespace: inference-dev
 spec:
   replicas: 1
 
