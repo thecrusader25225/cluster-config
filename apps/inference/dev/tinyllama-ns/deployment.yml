@@ -3,19 +3,19 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: tinyllama-auto
-  namespace: inference
+  name: tinyllama-ns
+
 spec:
   replicas: 1
 
   selector:
     matchLabels:
-      app: tinyllama-auto
+      app: tinyllama-ns
 
   template:
     metadata:
       labels:
-        app: tinyllama-auto
+        app: tinyllama-ns
 
     spec:
       containers:

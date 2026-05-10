@@ -1,3 +1,4 @@
 resources:
   - test-model2
   - tinyllama-auto
+  - tinyllama-ns
