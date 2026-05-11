@@ -1,0 +1,10 @@
+resources:
+  - ../../base
+
+images:
+  - name: shane25225/platform-backend
+    newTag: v1.0.0
+replicas:
+  - name: platform-backend
+    count: 3
+nameSuffix: -prod

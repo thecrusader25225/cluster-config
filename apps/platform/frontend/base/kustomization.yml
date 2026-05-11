@@ -1,0 +1,4 @@
+resources:
+  - frontend-depl.yml
+  - frontend-service.yml
+  - configmap.yml

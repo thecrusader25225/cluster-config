@@ -1,0 +1,9 @@
+resources:
+  - ../../base
+images:
+  - name: shane25225/platform-backend
+    newTag: "afc95f5b1e7d08e46a5b65f84a14c9a0ebb9d4ee"
+replicas:
+  - name: platform-backend
+    count: 1
+nameSuffix: -dev

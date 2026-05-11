@@ -1,0 +1,4 @@
+resources:
+  - platform-backend-depl.yml
+  - platform-backend-service.yml
+  - platform-backend-hpa.yml

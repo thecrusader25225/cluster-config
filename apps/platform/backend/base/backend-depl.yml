@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: platform-backend
+  namespace: platform
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: platform-backend
+
+  template:
+    metadata:
+      labels:
+        app: platform-backend
+
+    spec:
+      containers:
+      - name: backend
+
+        image: shane25225/platform-backend:v1
+
+        ports:
+        - containerPort: 5000

@@ -1,0 +1,9 @@
+resources:
+  - ../../base
+images:
+  - name: shane25225/platform-frontend
+    newTag: 837ecef4fedb63f10780517e9ff312f1bd9e05f5
+replicas:
+  - name: platform-frontend
+    count: 1
+nameSuffix: -dev
