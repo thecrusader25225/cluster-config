@@ -25,3 +25,10 @@ spec:
 
         ports:
         - containerPort: 5000
+
+        env:
+        - name: GH_PAT
+          valueFrom:
+            secretKeyRef:
+              name: github-secret
+              key: token
