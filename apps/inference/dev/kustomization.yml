@@ -2,3 +2,4 @@ resources:
 
   - tinyllama-ns
   - tinyllama-auto
+  - tinyllama-chat
