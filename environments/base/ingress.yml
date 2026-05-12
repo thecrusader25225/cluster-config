@@ -8,10 +8,18 @@ spec:
    - host: dev.platform-backend.192.168.219.64.sslip.io
      http:
         paths:
-        - path: /
+        - path: /api
           pathType: Prefix
           backend:
             service:
               name: platform-backend-dev
               port:
                 number: 80
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: platform-frontend-dev
+              port:
+                number: 80
+        
