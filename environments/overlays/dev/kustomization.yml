@@ -9,7 +9,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: dev.platform-backend.34.63.115.114.sslip.io
+        value: dev.platform-backend.34.67.156.110.sslip.io
 
       - op: replace
         path: /spec/rules/0/http/paths/0/backend/service/name
