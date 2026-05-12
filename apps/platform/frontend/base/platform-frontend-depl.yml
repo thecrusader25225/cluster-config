@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: platform-frontend
+  namespace: platform
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: platform-frontend
+
+  template:
+    metadata:
+      labels:
+        app: platform-frontend
+
+    spec:
+      containers:
+        - name: frontend
+
+          image: shane25225/platform-frontend:v1
+
+          ports:
+            - containerPort: 80
