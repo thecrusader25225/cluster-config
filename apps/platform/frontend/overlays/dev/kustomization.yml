@@ -2,7 +2,7 @@ resources:
   - ../../base
 images:
   - name: shane25225/platform-frontend
-    newTag: 0113c7a7b8425ac6560dfeafb7f455b1b8714233
+    newTag: 3a2dcfffd2e5e64035926a4c8f366ff8209086d5
 replicas:
   - name: platform-frontend
     count: 1
