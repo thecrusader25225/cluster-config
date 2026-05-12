@@ -1,0 +1,15 @@
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: qwen-1-5b
+  namespace: inference-dev
+
+spec:
+  selector:
+    app: qwen-1-5b
+
+  ports:
+    - port: 80
+      targetPort: 8080
