@@ -1,21 +1,20 @@
 resources:
   - ../../base
 
-namespace: dev
+namespace: platform
 nameSuffix: -dev
-
 patches:
   - target:
       kind: Ingress
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: dev.fullstack.192.168.156.129.sslip.io
-      
+        value: dev.platform-backend.34.63.115.114.sslip.io
+
       - op: replace
         path: /spec/rules/0/http/paths/0/backend/service/name
-        value: frontend-service-dev
-      
+        value: platform-backend-dev
+
       - op: replace
         path: /spec/rules/0/http/paths/1/backend/service/name
-        value: backend-service-dev
+        value: platform-frontend-dev
