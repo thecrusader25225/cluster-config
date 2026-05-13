@@ -1,162 +1,280 @@
-# Cluster Config – GitOps Configuration for <a href="https://github.com/thecrusader25225/webapp-services">Webapp Services</a>
+## Kubernetes-Native AI Model Deployment Platform
 
-This repository contains the **Kubernetes and Argo CD configuration** for deploying and operating the *Webapp Services* application using a **GitOps workflow**.
+A Kubernetes-native platform for dynamically deploying and interacting with GGUF-based LLMs using GitOps workflows, ArgoCD, and `llama.cpp`.
 
-It defines the **desired state of the cluster**, including:
-- application deployments
-- environment separation
-- ingress configuration
-- autoscaling and health checks
-- Argo CD Applications (app-of-apps pattern)
+This project provides:
 
-This repository does **not** contain application source code.
-
----
-
-## Purpose
-
-The purpose of this repository is to act as the **single source of truth for cluster state**.
-
-All changes to:
-- what runs in the cluster
-- where it runs (dev / prod)
-- how it is exposed
-- how it scales and heals  
-
-are made **declaratively via Git** and reconciled by **Argo CD**.
-
-No workloads are modified directly via `kubectl`.
+* Dynamic model deployment
+* GitOps-based infrastructure reconciliation
+* Runtime inference APIs
+* Kubernetes-native service discovery
+* ArgoCD-powered continuous deployment
+* Ingress-based external routing
+* React-based inference dashboard
+* Automatic manifest generation for deployed models
 
 ---
 
-## Cluster Topology
+## Architecture
 
-The configuration targets a **self-managed Kubernetes homelab cluster** with:
+```text
+User
+  ↓
+Frontend (React)
+  ↓
+Ingress NGINX
+  ├── /        → Frontend Service
+  └── /api     → Backend Service
+                     ↓
+               GitOps Orchestrator
+                     ↓
+              Cluster Config Repo
+                     ↓
+                  ArgoCD
+                     ↓
+         Dynamically Generated Deployments
+                     ↓
+            llama.cpp Inference Pods
+```
 
-- Provisioned using **kubeadm**
-- CNI: **Calico**
-- **1 control-plane node**
-- **2 worker nodes**
+---
 
+## Features
+
+### Dynamic Model Deployment
+
+Upload a GGUF model URL through the platform API.
+
+The backend automatically:
+
+1. Generates Kubernetes manifests
+2. Updates kustomization files
+3. Commits changes to GitHub
+4. Pushes changes to the GitOps repository
+5. ArgoCD reconciles the cluster state
+6. New inference pod becomes available
+
+---
+
+### GitOps Workflow
+
+This platform follows a GitOps deployment model.
+
+#### [Application Repository](https://github.com/thecrusader25225/ml-deployment)
+
+Contains:
+
+* Frontend source
+* Backend source
+* Github Actions CI pipelines
+
+#### [Cluster Configuration Repository](https://github.com/thecrusader25225/cluster-config)
+
+Contains:
+
+* Kubernetes manifests
+* Kustomize overlays
+* Generated inference deployments
+* Ingress configuration
+
+The backend dynamically updates the cluster configuration repository.
+
+---
+
+### Runtime Inference
+
+Each model is exposed internally through Kubernetes services.
+
+Example:
+
+```text
+tinyllama-chat.inference-dev.svc.cluster.local
+```
+
+Inference requests are routed through the backend API.
+
+---
+
+### Frontend Dashboard
+
+The frontend provides:
+
+* Available model list
+* Chat interface per model
+* Persistent local chat history
+* Dynamic inference interaction
+* API endpoint visibility
+
+---
+
+### Tech Stack
+
+| Category | Technologies |
+|---|---|
+| Frontend | React, Vite |
+| Backend | Node.js, Express |
+| AI / Inference | llama.cpp, Python |
+| Containerization | Docker |
+| Orchestration | Kubernetes |
+| GitOps / CD | ArgoCD |
+| CI | GitHub Actions |
+| Networking | Ingress NGINX |
+| Configuration | Kustomize |
+| Infrastructure | Google Cloud Compute Engine |
 ---
 
 ## Repository Structure
 
-```
-cluster-config/
-├───apps/
-│   ├───backend/
-│   │   ├───base/
-│   │   └───overlays/
-│   │       ├───dev/
-│   │       └───prod/
-│   └───frontend/
-│       ├───base/
-│       └───overlays/
-│           ├───dev/
-│           └───prod/
-├───argocd/
-│   ├───dev/
-│   └───prod/
-└───environments/
-    ├───base/
-    └───overlays/
-        ├───dev/
-        └───prod/
+```text
+.
+├── frontend/
+├── backend/
+├── .github/workflows/
+└── cluster-config/
+    ├── apps/
+    │   ├── platform/
+    │   └── inference/
+    └── environments/
 ```
 
+---
+
+## CI/CD Flow
+
+### Frontend / Backend CI
+
+On push:
+
+1. Build Docker image
+2. Push image to Docker Hub
+3. Update kustomization image tag
+4. Push changes to cluster-config repository
+5. ArgoCD syncs cluster automatically
 
 ---
 
-## Environment Separation
+## Example Model Deployment
 
-Environments are isolated using **Kustomize overlays** and **namespaces**:
+### Register Model
 
-- `dev`
-- `prod`
-
-Each environment has:
-- independent overlays
-- separate ingress configuration
-- explicit environment identity injected via configuration
-
-No manifests are shared implicitly between environments.
-
----
-
-## Argo CD Setup
-
-This repository uses the **app-of-apps pattern**.
-
-### Root Applications
-
-- `dev-root`
-- `prod-root`
-
-Each root application:
-- lives in the `argocd/` directory
-- references child applications declaratively
-- manages synchronization behavior for its environment
-
-### Sync Strategy
-
-- **Development**
-  - Auto-sync enabled
-  - Automatic pruning
-- **Production**
-  - Manual sync
-  - Explicit promotion required
-
-This enforces fast iteration in dev and controlled releases in prod.
+```bash
+curl -X POST http://<platform-url>/api/models \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name":"tinyllama-chat",
+    "modelUrl":"https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q2_K.gguf",
+    "runtime":"llama.cpp"
+  }'
+```
 
 ---
 
-## Image Promotion Flow
+### Inference Request
 
-This repository does **not build images**.
-
-Instead:
-- CI pipelines in the <a href="https://github.com/thecrusader25225/webapp-services">application repository</a> build and publish images
-- Image tags are updated in **environment overlays** here
-- Argo CD reconciles the new desired state
-
-This preserves a strict separation between:
-- **artifact creation** (CI)
-- **artifact deployment** (GitOps)
+```bash
+curl -X POST http://<platform-url>/api/models/tinyllama-chat/infer \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt":"What is Kubernetes?",
+    "n_predict":64
+  }'
+```
 
 ---
 
-## Platform & Runtime Characteristics
+## Kubernetes Components
 
-The following Kubernetes primitives are configured as baseline runtime behavior:
+### Platform Namespace
 
-- **Health Probes**
-  - `livenessProbe` and `readinessProbe` are defined for workloads
-  - Used to validate pod health and traffic readiness
+Contains:
 
-- **Horizontal Pod Autoscaler (HPA)**
-  - Backend workloads are configured with HPA
-  - Used to validate autoscaling mechanics rather than load testing
-
----
-
-## What This Repository Does NOT Contain
-
-- Application source code
-- CI pipelines
-- Build logic
-- Dockerfiles
-
-Those live in the application repository:<a href="https://github.com/thecrusader25225/webapp-services">webapp-services</a>
+* Frontend deployment
+* Backend deployment
+* Ingress
+* Platform services
 
 ---
 
-## Design Principles
+### Inference Namespace
 
-- Git is the single source of truth
-- No direct cluster mutation
-- Clear environment boundaries
-- Declarative over imperative
-- Minimal but realistic configuration
+Contains dynamically generated:
 
+* Model deployments
+* Model services
+* Runtime containers
 
+---
+
+## Ingress Routing
+
+```text
+/api  → backend
+/     → frontend
+```
+
+Ingress uses host-based routing with `sslip.io`.
+
+---
+
+## Current Limitations
+
+* Models are not yet persisted across backend restarts
+* GGUF files currently download during deployment
+* External DNS currently uses dynamic VM IPs
+* ArgoCD currently relies on polling instead of webhooks
+
+---
+
+## Planned Improvements
+
+* Persistent volumes for GGUF storage
+* SQLite metadata persistence
+* ArgoCD webhook-based instant sync
+* Authentication and RBAC
+* Streaming inference responses
+* GPU scheduling support
+* Multi-runtime support
+* Deployment health monitoring
+* Canary deployments
+* HTTPS with custom domain
+
+---
+
+## Running the Platform
+
+### Start Kubernetes Cluster
+
+```bash
+kubectl get nodes
+```
+
+---
+
+### Deploy ArgoCD
+
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+
+---
+
+### Apply Applications
+
+```bash
+kubectl apply -f applications/
+```
+
+---
+
+### Access Platform
+
+```text
+http://<external-ip>.sslip.io:<nodeport>
+```
+
+---
+
+## License
+
+[MIT](LICENSE)
